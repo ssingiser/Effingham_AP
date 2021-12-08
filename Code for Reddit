@@ -1,0 +1,28 @@
+import meraki
+import csv
+from EffinghamEnviroment import *
+
+dashboard = meraki.DashboardAPI(API_KEY)
+
+filename = "aps.csv"
+fields = []
+name = []
+serials = []
+
+with open(filename, 'r') as csv_f: #opens csv in read
+	csvreader = csv.reader(csv_f) #reads csv
+	fields = next(csvreader) #skips titles
+	for row in csvreader: #loops through csv
+		name.append(row[1])
+		serials.append(row[2])
+
+name = str(name)[2:-2] #removes outside characters
+serials = str(serials)[2:-2] #removes outside characters
+
+response = dashboard.devices.updateDevice(
+	serial=serials,
+	name=name
+)
+
+print(response)
+
